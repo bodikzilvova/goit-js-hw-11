@@ -1,0 +1,55 @@
+.hidden {
+    display: none;
+    
+  }
+
+  .search-form{
+    background-color: tomato;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+
+    position: sticky;
+    top: 0;
+
+  }
+
+  input{
+    margin-right: auto;
+    margin-left: auto;
+    background-color: whitesmoke;
+    width: 500px;
+    border: none;
+    outline: none;
+    font-size: 25px;
+  }
+
+  .search-btn{
+    background-color: greenyellow;
+    border: 1px solid black;
+    cursor: pointer;
+  }
+
+
+  .gallery{
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  img{
+    width: 400px;
+    height: 400px;
+  }
+
+  .photo-card{
+    margin: auto;
+    margin-bottom: 10px;
+    border: 1px solid grey
+    ;
+  }
+
+  .info{
+ 
+    text-align: center;
+  }
