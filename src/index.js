@@ -4,6 +4,7 @@ import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import { fetchImages } from './api';
 
+const lightbox = new SimpleLightbox(".lightbox");
 const searchForm = document.querySelector("#search-form");
 const gallery = document.querySelector(".gallery");
 const loadMore = document.querySelector(".load-more");
@@ -11,8 +12,6 @@ const loadMore = document.querySelector(".load-more");
 loadMore.classList.add("hidden");
 
 let page = 1;
-
-const lightbox = new SimpleLightbox(".lightbox");
 
 searchForm.addEventListener("submit", async function (event) {
   event.preventDefault();
@@ -26,6 +25,7 @@ searchForm.addEventListener("submit", async function (event) {
 
     if (data.hits.length === 0) {
       Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+      loadMore.classList.add("hidden");
     } else {
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
       gallery.innerHTML = createMarkup(data);
@@ -81,8 +81,8 @@ loadMore.addEventListener("click", async function () {
       gallery.insertAdjacentHTML("beforeend", createMarkup(data));
       page += 1;
       loadMore.classList.remove("hidden");
-
       lightbox.refresh();
+
 
       const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
 
