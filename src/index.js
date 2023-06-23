@@ -19,20 +19,22 @@ searchForm.addEventListener("submit", async function (event) {
   gallery.innerHTML = "";
 
   const searchQuery = document.querySelector('input[name="searchQuery"]').value;
+  page = 1;
 
   try {
-    const data = await fetchImages(searchQuery, 1);
-
-    if (data.hits.length === 0) {
-      Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-      loadMore.classList.add("hidden");
-    } else {
-      Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
-      gallery.innerHTML = createMarkup(data);
-      loadMore.classList.remove("hidden");
-     
-      lightbox.refresh();
-    }
+    await fetchImages(searchQuery, 1)
+.then(data => {
+  if (data.hits.length === 0) {
+  Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+  loadMore.classList.add("hidden");
+} else {
+  Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
+  gallery.innerHTML = createMarkup(data);
+  loadMore.classList.remove("hidden");
+ 
+  lightbox.refresh();
+}})
+  
   } catch (error) {
     console.log(error);
   }
@@ -69,30 +71,30 @@ function createMarkup(data) {
 
 loadMore.addEventListener("click", async function () {
   const searchQuery = document.querySelector('input[name="searchQuery"]').value;
-
+  page += 1;
 
   try {
-    const data = await fetchImages(searchQuery, page);
-
-    if (data.totalHits <= page * 40) {
-      loadMore.classList.add("hidden");
-      Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
-    } else {
+    await fetchImages(searchQuery, page)
+    .then(data => {
       gallery.insertAdjacentHTML("beforeend", createMarkup(data));
-      page += 1;
-      loadMore.classList.remove("hidden");
-      lightbox.refresh();
+  loadMore.classList.remove("hidden");
+  lightbox.refresh();
 
 
-      const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
+  const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
 
-      window.scrollBy({
-        top: cardHeight * 1,
-        behavior: "smooth",
-      });
-    }
-  } catch (error) {
-    console.log(error);
-  }
+  window.scrollBy({
+    top: cardHeight * 1,
+    behavior: "smooth",
+  });
+    })
+
+    .catch ( ()=> {
+    loadMore.classList.add("hidden");
+  Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
+  })
+} catch (error) {
+  console.log(error);
+}
 });
 
